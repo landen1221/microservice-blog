@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: comments-depl
+spec:
+    replicas: 1 #number of pods
+    selector:
+        matchLabels: # find all pods with label 'comments'
+            app: comments
+    template:
+        metadata:
+            labels: #labels pods being created (matches matchLabels)
+                app: comments
+        spec:
+            containers:
+                - name: comments
+                  image: landen1221/comments
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: comments-srv
+spec:
+    selector:
+        app: comments
+    type: ClusterIP
+    ports:
+        - name: comments
+          protocol: TCP
+          port: 4001
+          targetPort: 4001
